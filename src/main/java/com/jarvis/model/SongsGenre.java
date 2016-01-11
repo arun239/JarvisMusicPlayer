@@ -18,8 +18,7 @@ public class SongsGenre extends BaseEntity {
         Party,
         Retro,
         Pop,
-        Workout,
-        Old
+        Workout
     }
 
     @Column(length = 10)
