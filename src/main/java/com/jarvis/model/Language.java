@@ -7,7 +7,7 @@ import javax.persistence.Entity;
  * Created by arungu on 1/11/2016.
  */
 @Entity
-public class SongLanguage extends BaseEntity{
+public class Language extends BaseEntity{
 
     public static enum SongLanguageEnum{
         HINDI,

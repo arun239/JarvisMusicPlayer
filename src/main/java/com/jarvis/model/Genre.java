@@ -7,7 +7,7 @@ import javax.persistence.Entity;
  * Created by arungu on 1/11/2016.
  */
 @Entity
-public class SongsGenre extends BaseEntity {
+public class Genre extends BaseEntity {
 
     public static enum SongGenreEnum {                         //Nested Class because of static keyword
         Classical,

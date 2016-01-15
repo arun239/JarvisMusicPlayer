@@ -7,13 +7,10 @@ import javax.persistence.Entity;
  * Created by arungu on 1/11/2016.
  */
 @Entity
-public class SongsList extends BaseEntity {
+public class Song extends BaseEntity {
 
     @Column
     private String songName;
-
-    @Column
-    private String fileName;
 
     public String getSongName() {
         return songName;
@@ -23,11 +20,4 @@ public class SongsList extends BaseEntity {
         this.songName = songName;
     }
 
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
 }
