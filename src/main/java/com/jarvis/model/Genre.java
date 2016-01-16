@@ -1,7 +1,8 @@
 package com.jarvis.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 /**
  * Created by arungu on 1/11/2016.
@@ -10,18 +11,18 @@ import javax.persistence.Entity;
 public class Genre extends BaseEntity {
 
     public static enum SongGenreEnum {                         //Nested Class because of static keyword
-        Classical,
-        Sufi,
-        Devotional,
-        Rock,
-        Romance,
-        Party,
-        Retro,
-        Pop,
-        Workout
+        CLASSICAL,
+        SUFI,
+        DEVITIONAL,
+        ROCK,
+        ROMANCE,
+        PARTY,
+        RETRO,
+        POP,
+        WORKOUT
     }
 
-    @Column(length = 10)
+    @Enumerated(EnumType.STRING)
     private SongGenreEnum songGenre;
 
     public SongGenreEnum getSongGenre() {

@@ -1,8 +1,14 @@
 package com.jarvis.service;
 
+import com.jarvis.model.Genre;
+import com.jarvis.model.Language;
 import com.jarvis.model.Song;
+import com.jarvis.model.User;
 import com.jarvis.pojo.SongInfoPojo;
+import com.jarvis.repository.GenreRepository;
+import com.jarvis.repository.LanguageRepository;
 import com.jarvis.repository.SongRepository;
+import com.jarvis.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,16 +34,37 @@ public class SongUploadService {
     @Autowired
     SongRepository songRepository;
 
+    @Autowired
+    UserRepository userRepository;
+
+    @Autowired
+    LanguageRepository languageRepository;
+
+    @Autowired
+    GenreRepository genreRepository;
+
 
     public void processSongInfoPojo(SongInfoPojo songInfoPojo) throws Exception {
 
 
         //Repo insertion
+        User user = new User();
+        user.setUserName(songInfoPojo.getUserName());
+        userRepository.save(user);
+
+        Language language = new Language();
+        language.setSongLanguage(songInfoPojo.getSongLanguage());
+        languageRepository.save(language);
+
+        Genre genre = new Genre();
+        genre.setSongGenre(songInfoPojo.getSongGenre());
+        genreRepository.save(genre);
+
         Song song = new Song();
         song.setSongName(songInfoPojo.getSongName());
-
-        Song insertedSong = songRepository.save(song);
-        String fileName = insertedSong.getId();  // We are using id as the fileName in our system.
+        songRepository.save(song);
+        
+        String fileName = song.getId();  // We are using id as the fileName in our system.
 
         MultipartFile songFile = songInfoPojo.getFile();
 

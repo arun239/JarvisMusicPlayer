@@ -1,5 +1,7 @@
 package com.jarvis.controller;
 
+import com.jarvis.model.Genre;
+import com.jarvis.model.Language;
 import com.jarvis.pojo.SongInfoPojo;
 import com.jarvis.service.SongUploadService;
 import org.slf4j.Logger;
@@ -30,15 +32,16 @@ public class SongUploadController {
 
     public String songUploadHandler(@RequestParam("songName") String songName,
                                     @RequestParam("userName") String userName,
-                                    @RequestParam("language") String language,
-                                    @RequestParam("genre") String genre,
-                                   @RequestParam("songFile") MultipartFile songFile) {
+                                    @RequestParam("language") Language.SongLanguageEnum language,
+                                    @RequestParam("genre") Genre.SongGenreEnum genre,
+                                    @RequestParam("songFile") MultipartFile songFile) {
 
 
         SongInfoPojo songInfoPojo = new SongInfoPojo(songName, userName, language, genre, songFile);
         try {
             songUploadService.processSongInfoPojo(songInfoPojo);
         } catch (Exception e) {
+            e.printStackTrace();
             logger.error(e.toString());
             return "Error occurred while processing";  // TODO: Add response code.
             // FIXME: Sample FIXME

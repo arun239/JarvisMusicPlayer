@@ -1,7 +1,8 @@
 package com.jarvis.model;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 
 /**
  * Created by arungu on 1/11/2016.
@@ -14,7 +15,7 @@ public class Language extends BaseEntity{
         ENGLISH
     }
 
-    @Column(length = 10)
+    @Enumerated(EnumType.STRING)
     private SongLanguageEnum songLanguage;
 
     public SongLanguageEnum getSongLanguage() {

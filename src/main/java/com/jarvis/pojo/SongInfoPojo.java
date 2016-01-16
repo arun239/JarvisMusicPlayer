@@ -1,5 +1,7 @@
 package com.jarvis.pojo;
 
+import com.jarvis.model.Genre;
+import com.jarvis.model.Language;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -7,19 +9,20 @@ import org.springframework.web.multipart.MultipartFile;
  */
 public class SongInfoPojo {
 
+
     private String songName;
     private String userName;
-    private String language;
-    private String genre;
+    private Language.SongLanguageEnum songLanguage;
+    private Genre.SongGenreEnum songGenre;
     private MultipartFile file;
 
 
 
-    public SongInfoPojo(String songName, String userName, String language, String genre, MultipartFile file) {
+    public SongInfoPojo(String songName, String userName, Language.SongLanguageEnum language, Genre.SongGenreEnum genre, MultipartFile file) {
         this.songName = songName;
         this.userName = userName;
-        this.language = language;
-        this.genre = genre;
+        this.songLanguage = language;
+        this.songGenre = genre;
         this.file = file;
     }
 
@@ -39,20 +42,20 @@ public class SongInfoPojo {
         this.userName = userName;
     }
 
-    public String getLanguage() {
-        return language;
+    public Language.SongLanguageEnum getSongLanguage() {
+        return songLanguage;
     }
 
-    public void setLanguage(String language) {
-        this.language = language;
+    public void setSongLanguage(Language.SongLanguageEnum songLanguage) {
+        this.songLanguage = songLanguage;
     }
 
-    public String getGenre() {
-        return genre;
+    public Genre.SongGenreEnum getSongGenre() {
+        return songGenre;
     }
 
-    public void setGenre(String genre) {
-        this.genre = genre;
+    public void setSongGenre(Genre.SongGenreEnum songGenre) {
+        this.songGenre = songGenre;
     }
 
     public MultipartFile getFile() {
