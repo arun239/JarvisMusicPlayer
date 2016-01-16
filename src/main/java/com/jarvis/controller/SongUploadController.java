@@ -28,27 +28,27 @@ public class SongUploadController {
     }
 
     @RequestMapping(value="/SongUpload", method = RequestMethod.POST)
-
-
     public String songUploadHandler(@RequestParam("songName") String songName,
-                                    @RequestParam("userName") String userName,
+                                    @RequestParam("userEmail") String userEmail,
                                     @RequestParam("language") Language.SongLanguageEnum language,
                                     @RequestParam("genre") Genre.SongGenreEnum genre,
+                                    @RequestParam("playlistId") String playlistId,
                                     @RequestParam("songFile") MultipartFile songFile) {
 
 
-        SongInfoPojo songInfoPojo = new SongInfoPojo(songName, userName, language, genre, songFile);
+        SongInfoPojo songInfoPojo = new SongInfoPojo(songName, userEmail, language, genre, playlistId,songFile);
+        String message = "Error";
         try {
-            songUploadService.processSongInfoPojo(songInfoPojo);
+            message = songUploadService.processSongInfoPojo(songInfoPojo);
         } catch (Exception e) {
             e.printStackTrace();
             logger.error(e.toString());
-            return "Error occurred while processing";  // TODO: Add response code.
+            return message;  // TODO: Add response code.
             // FIXME: Sample FIXME
         }
 
 
-        return "You successfully uploaded " ;
+        return message ;
     }
 
 }

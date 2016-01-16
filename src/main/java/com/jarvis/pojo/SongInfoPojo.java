@@ -11,18 +11,20 @@ public class SongInfoPojo {
 
 
     private String songName;
-    private String userName;
+    private String userEmail;
     private Language.SongLanguageEnum songLanguage;
     private Genre.SongGenreEnum songGenre;
+    private String playlistId;
     private MultipartFile file;
 
 
 
-    public SongInfoPojo(String songName, String userName, Language.SongLanguageEnum language, Genre.SongGenreEnum genre, MultipartFile file) {
+    public SongInfoPojo(String songName, String userEmail, Language.SongLanguageEnum language, Genre.SongGenreEnum genre,String playlistId, MultipartFile file) {
         this.songName = songName;
-        this.userName = userName;
+        this.userEmail = userEmail;
         this.songLanguage = language;
         this.songGenre = genre;
+        this.playlistId = playlistId;
         this.file = file;
     }
 
@@ -34,12 +36,12 @@ public class SongInfoPojo {
         this.songName = songName;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
     public Language.SongLanguageEnum getSongLanguage() {
@@ -57,6 +59,10 @@ public class SongInfoPojo {
     public void setSongGenre(Genre.SongGenreEnum songGenre) {
         this.songGenre = songGenre;
     }
+
+    public String getPlaylistId() { return playlistId; }
+
+    public void setPlaylistId(String playlistId) { this.playlistId = playlistId;}
 
     public MultipartFile getFile() {
         return file;
