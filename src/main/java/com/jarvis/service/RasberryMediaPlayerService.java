@@ -8,26 +8,26 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 /**
- * Created by arungu on 1/17/2016.
+ * Created by arungu on 1/23/2016.
  */
 @Component
-public class WindowsMediaPlayerService implements MediaPlayerService{
-        private static final Logger logger = LoggerFactory.getLogger(WindowsMediaPlayerService.class);
+public class RasberryMediaPlayerService implements MediaPlayerService {
 
-        @Autowired
-        Utilities utilities;
+    private static final Logger logger = LoggerFactory.getLogger(WindowsMediaPlayerService.class);
+    private static final String PLAY_COMMAND = "%s --loop -o local %s &";   //'&' sign to run in separate thread
 
+
+    @Autowired
+    Utilities utilities;
 
     @Override
     public void songPlay(String songId) {
 
         logger.info("Playing Song: " + songId);
-        String songPath = utilities.getUploadPath(songId);
-        String playerPath = utilities.getPlayerPath();
         try {
-            String command = playerPath + " " + songPath;
+            String command = String.format(PLAY_COMMAND, utilities.getPlayerPath(), utilities.getUploadPath(songId));
             logger.info("Executing command : " + command);
-            Process process = Runtime.getRuntime().exec(command);
+            Runtime.getRuntime().exec(command);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -35,7 +35,6 @@ public class WindowsMediaPlayerService implements MediaPlayerService{
 
     @Override
     public void songPause() {
-       // Process process = Runtime.getRuntime().exec();
 
     }
 
