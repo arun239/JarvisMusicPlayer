@@ -19,7 +19,6 @@ public class UserRegistrationController {
     UserRepository userRepository;
 
     @RequestMapping(value = "/UserRegistration", method = RequestMethod.POST)
-
     public String  userRegistrationHandler(@RequestBody User user)
     {
         userRepository.save(user);

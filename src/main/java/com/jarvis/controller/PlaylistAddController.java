@@ -8,6 +8,8 @@ import com.jarvis.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -28,10 +30,11 @@ public class PlaylistAddController {
     PlaylistRepository playlistRepository;
 
     @RequestMapping(value = "/PlaylistAdd", method = RequestMethod.POST)
-    public String playlistAddController(@RequestBody PlaylistInfoPojo playlistInfoPojo)
+    public ResponseEntity<String> playlistAddController(@RequestBody PlaylistInfoPojo playlistInfoPojo)
     {
-
         String userEmail = playlistInfoPojo.getUserEmail();
+        String returnStatus = "Playlist Added Successfully";
+        HttpStatus httpStatus = HttpStatus.CREATED;
         if (userEmail != null) {
             User user = userRepository.findFirstByUserEmail(userEmail);
             if(user != null) {
@@ -39,12 +42,15 @@ public class PlaylistAddController {
                 playlist.setUser(user);
                 playlistRepository.save(playlist);
             } else {
-                logger.info("Can't find user with userEmail: " + userEmail);
+                returnStatus = "Can't find user with userEmail: " + userEmail;
+                httpStatus = HttpStatus.PRECONDITION_FAILED;
+                logger.info(returnStatus);
             }
         } else {
-            logger.error("Can't proceed with null userEmail");
+            returnStatus = "Can't proceed with null userEmail";
+            httpStatus = HttpStatus.BAD_REQUEST;
+            logger.error(returnStatus);
         }
-
-        return "Playlist Added Successfully";
+        return new ResponseEntity<String>(returnStatus, httpStatus);
     }
 }

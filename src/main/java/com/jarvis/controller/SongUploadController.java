@@ -1,14 +1,20 @@
 package com.jarvis.controller;
 
-import com.jarvis.model.Genre;
-import com.jarvis.model.Language;
-import com.jarvis.pojo.SongInfoPojo;
+import com.jarvis.model.*;
+import com.jarvis.repository.*;
 import com.jarvis.service.SongUploadService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * Created by arungu on 1/12/2016.
@@ -17,38 +23,83 @@ import org.springframework.web.multipart.MultipartFile;
 @RestController
 public class SongUploadController {
     private static final Logger logger = LoggerFactory.getLogger(SongUploadController.class);
+    String returnStatus = "Song Uploaded Successfully";
+    HttpStatus httpStatus = HttpStatus.CREATED;
 
     @Autowired
     SongUploadService songUploadService;
 
-    @RequestMapping(value="/SongUpload", method = RequestMethod.GET)
-    public String songUploadInfo() {
+    @Autowired
+    SongRepository songRepository;
 
-        return "Success!!File Uploaded";
-    }
+    @Autowired
+    UserRepository userRepository;
 
-    @RequestMapping(value="/SongUpload", method = RequestMethod.POST)
-    public String songUploadHandler(@RequestParam("songName") String songName,
-                                    @RequestParam("userEmail") String userEmail,
-                                    @RequestParam("language") Language.SongLanguageEnum language,
-                                    @RequestParam("genre") Genre.SongGenreEnum genre,
-                                    @RequestParam("playlistId") String playlistId,
-                                    @RequestParam("songFile") MultipartFile songFile) {
+    @Autowired
+    LanguageRepository languageRepository;
+
+    @Autowired
+    GenreRepository genreRepository;
+
+    @Autowired
+    PlaylistRepository playlistRepository;
 
 
-        SongInfoPojo songInfoPojo = new SongInfoPojo(songName, userEmail, language, genre, playlistId,songFile);
-        String message = "Error";
+    @RequestMapping(value = "/SongUpload", method = RequestMethod.POST)
+    public ResponseEntity<String> songUploadHandler(@RequestParam("songName") String songName,
+                                                    @RequestParam("userEmail") String userEmail,
+                                                    @RequestParam("language") Language.SongLanguageEnum songLanguage,
+                                                    @RequestParam("genre") Genre.SongGenreEnum songGenre,
+                                                    @RequestParam("playlistId") String playlistId,
+                                                    @RequestParam("songFile") MultipartFile songFile) {
+
+
+        //  SongInfoPojo songInfoPojo = new SongInfoPojo(songName, userEmail, songLanguage, songGenre, playlistId,songFile);
+
         try {
-            message = songUploadService.processSongInfoPojo(songInfoPojo);
+            User user = userRepository.findFirstByUserEmail(userEmail);
+            if (user != null) {
+
+                Playlist playlist = playlistRepository.findFirstById(playlistId);
+                if (playlist != null) {
+                    Language language = new Language();
+                    language.setSongLanguage(songLanguage);
+                    languageRepository.save(language);
+
+                    Genre genre = new Genre();
+                    genre.setSongGenre(songGenre);
+                    genreRepository.save(genre);
+
+                    Song song = new Song();
+                    song.setSongName(songName);
+                    song.setUploadedBy(userEmail);
+                    song.setPlaylistId(playlistId);
+                    songRepository.save(song);
+
+                    String fileName = song.getId();  // We are using id as the fileName in our system.
+
+                    songUploadService.processSongInfo(fileName, songFile);
+                } else {
+                    returnStatus = "Incorrect playListID.";
+                    httpStatus = HttpStatus.PRECONDITION_FAILED;
+                    logger.error(returnStatus);
+                }
+            } else {
+                returnStatus = "Incorrect userEmail.";
+                httpStatus = HttpStatus.PRECONDITION_FAILED;
+                logger.error(returnStatus);
+            }
+        } catch (IOException e) {
+            returnStatus = "IOException occured while uploading song: " + songName;
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            logger.error(returnStatus, e);
         } catch (Exception e) {
-            e.printStackTrace();
-            logger.error(e.toString());
-            return message;  // TODO: Add response code.
-            // FIXME: Sample FIXME
+            returnStatus = "Exception occured while uploading song: " + songName;
+            httpStatus = HttpStatus.INTERNAL_SERVER_ERROR;
+            logger.error(returnStatus, e);
         }
 
-
-        return message ;
+        return new ResponseEntity<String>(returnStatus, httpStatus);
     }
 
 }
