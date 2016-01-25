@@ -36,23 +36,15 @@ public class SongUploadController {
     UserRepository userRepository;
 
     @Autowired
-    LanguageRepository languageRepository;
-
-    @Autowired
-    GenreRepository genreRepository;
-
-    @Autowired
     PlaylistRepository playlistRepository;
-
 
     @RequestMapping(value = "/SongUpload", method = RequestMethod.POST)
     public ResponseEntity<String> songUploadHandler(@RequestParam("songName") String songName,
                                                     @RequestParam("userEmail") String userEmail,
-                                                    @RequestParam("language") Language.SongLanguageEnum songLanguage,
-                                                    @RequestParam("genre") Genre.SongGenreEnum songGenre,
+                                                    @RequestParam("language") Song.SongLanguageEnum songLanguage,
+                                                    @RequestParam("genre") Song.SongGenreEnum songGenre,
                                                     @RequestParam("playlistId") String playlistId,
                                                     @RequestParam("songFile") MultipartFile songFile) {
-
 
         //  SongInfoPojo songInfoPojo = new SongInfoPojo(songName, userEmail, songLanguage, songGenre, playlistId,songFile);
 
@@ -62,18 +54,13 @@ public class SongUploadController {
 
                 Playlist playlist = playlistRepository.findFirstById(playlistId);
                 if (playlist != null) {
-                    Language language = new Language();
-                    language.setSongLanguage(songLanguage);
-                    languageRepository.save(language);
-
-                    Genre genre = new Genre();
-                    genre.setSongGenre(songGenre);
-                    genreRepository.save(genre);
 
                     Song song = new Song();
                     song.setSongName(songName);
                     song.setUploadedBy(userEmail);
                     song.setPlaylistId(playlistId);
+                    song.setSongLanguage(songLanguage);
+                    song.setSongGenre(songGenre);
                     songRepository.save(song);
 
                     String fileName = song.getId();  // We are using id as the fileName in our system.
