@@ -23,8 +23,6 @@ import java.io.IOException;
 @RestController
 public class SongUploadController {
     private static final Logger logger = LoggerFactory.getLogger(SongUploadController.class);
-    String returnStatus = "Song Uploaded Successfully";
-    HttpStatus httpStatus = HttpStatus.CREATED;
 
     @Autowired
     SongUploadService songUploadService;
@@ -48,6 +46,9 @@ public class SongUploadController {
 
         //  SongInfoPojo songInfoPojo = new SongInfoPojo(songName, userEmail, songLanguage, songGenre, playlistId,songFile);
 
+        String returnStatus = "Song Uploaded Successfully";
+        HttpStatus httpStatus = HttpStatus.CREATED;
+
         try {
             User user = userRepository.findFirstByUserEmail(userEmail);
             if (user != null) {
@@ -55,17 +56,24 @@ public class SongUploadController {
                 Playlist playlist = playlistRepository.findFirstById(playlistId);
                 if (playlist != null) {
 
-                    Song song = new Song();
-                    song.setSongName(songName);
-                    song.setUploadedBy(userEmail);
-                    song.setPlaylistId(playlistId);
-                    song.setSongLanguage(songLanguage);
-                    song.setSongGenre(songGenre);
-                    songRepository.save(song);
+                    if(playlist.getUser() == user) {
 
-                    String fileName = song.getId();  // We are using id as the fileName in our system.
+                        Song song = new Song();
+                        song.setSongName(songName);
+                        song.setUploadedBy(userEmail);
+                        song.setPlaylistId(playlistId);
+                        song.setSongLanguage(songLanguage);
+                        song.setSongGenre(songGenre);
+                        songRepository.save(song);
 
-                    songUploadService.processSongInfo(fileName, songFile);
+                        String fileName = song.getId();  // We are using id as the fileName in our system.
+
+                        songUploadService.processSongInfo(fileName, songFile);
+                    }else {
+                        returnStatus = "playList doesn't belong to " + userEmail;
+                        httpStatus = HttpStatus.PRECONDITION_FAILED;
+                        logger.error(returnStatus);
+                    }
                 } else {
                     returnStatus = "Incorrect playListID.";
                     httpStatus = HttpStatus.PRECONDITION_FAILED;

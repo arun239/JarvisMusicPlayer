@@ -32,9 +32,10 @@ public class PlaylistAddController {
     @RequestMapping(value = "/PlaylistAdd", method = RequestMethod.POST)
     public ResponseEntity<String> playlistAddController(@RequestBody PlaylistInfoPojo playlistInfoPojo)
     {
-        String userEmail = playlistInfoPojo.getUserEmail();
         String returnStatus = "Playlist Added Successfully";
         HttpStatus httpStatus = HttpStatus.CREATED;
+
+        String userEmail = playlistInfoPojo.getUserEmail();
         if (userEmail != null) {
             User user = userRepository.findFirstByUserEmail(userEmail);
             if(user != null) {
