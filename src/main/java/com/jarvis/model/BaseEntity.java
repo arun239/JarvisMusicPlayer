@@ -12,7 +12,7 @@ import java.util.Date;
 @MappedSuperclass
 public class BaseEntity {
 
-    @JsonIgnore
+
     @Id
     @GeneratedValue(generator = "system-uuid")
     @GenericGenerator(name = "system-uuid", strategy = "uuid2")
@@ -33,6 +33,7 @@ public class BaseEntity {
         return id;
     }
 
+    @JsonIgnore
     public void setId(String id) {
         this.id = id;
     }

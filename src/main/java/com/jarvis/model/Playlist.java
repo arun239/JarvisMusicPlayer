@@ -1,5 +1,8 @@
 package com.jarvis.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
@@ -17,6 +20,7 @@ public class Playlist extends BaseEntity {
     @Column
     private  String playlistDescription;
 
+    @JsonIgnore
     @ManyToOne(optional = false, targetEntity = User.class)
     private User user;
 
@@ -36,10 +40,12 @@ public class Playlist extends BaseEntity {
         this.playlistDescription = playlistDescription;
     }
 
+    @JsonIgnore
     public User getUser() {
         return user;
     }
 
+    @JsonProperty
     public void setUser(User user) {
         this.user = user;
     }

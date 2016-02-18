@@ -1,5 +1,7 @@
 package com.jarvis.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -8,6 +10,7 @@ import javax.persistence.Enumerated;
 /**
  * Created by arungu on 1/11/2016.
  */
+@JsonIgnoreProperties({"id"})
 @Entity
 public class Song extends BaseEntity {
 

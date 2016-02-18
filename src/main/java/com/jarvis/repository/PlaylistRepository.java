@@ -11,5 +11,6 @@ import java.util.List;
 public interface PlaylistRepository extends CrudRepository<Playlist,Long> {
     public Playlist findFirstById(String id);
     public List<Playlist> findAllByOrderByPlaylistNameAsc();
+    public List<Playlist> findByUser_UserEmail(String userEmail);
 }
 

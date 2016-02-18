@@ -1,11 +1,14 @@
 package com.jarvis.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 
 /**
  * Created by arungu on 1/11/2016.
  */
+@JsonIgnoreProperties({"id"})
 @Entity
 public class User extends BaseEntity {
 
